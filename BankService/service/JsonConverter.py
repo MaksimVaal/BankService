@@ -16,7 +16,7 @@ def get_operations(json_file):
         try:
             operation_list.append(Operation(**j))
         except Exception as t:
-            logger.error('Ошибка при разборе json\n')
+            logger.error('[CONVERTER-E001] Ошибка при разборе json\n')
 
     return operation_list
 
@@ -30,7 +30,7 @@ def get_last_operations(list_operations):
 
     sorted_operations = sorted(execute_operations, key=lambda x: x.date, reverse=True)
 
-    logger.info('Последние 5 переводов:\n')
+    logger.info('[CONVERTER-I001] Последние 5 переводов:\n')
 
     for operation in sorted_operations[:5]:
         print(f'{operation.date} {operation.description}\n'
