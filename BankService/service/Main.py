@@ -1,9 +1,11 @@
 import json
 import logging
+import re
 
-from BankService.dto.OperationAmount import Operation
+from BankService.dto.Operation import Operation
 
 logger = logging.getLogger(__name__)
+
 
 def get_operations(json_file):
     with open(json_file, 'r', encoding="utf-8") as file:
@@ -16,11 +18,12 @@ def get_operations(json_file):
         try:
             operation_list.append(Operation(**j))
         except Exception as t:
-            logger.error('[CONVERTER-E001] Ошибка при разборе json\n')
+            logger.error('[CONVERTER-E001] Ошибка при разборе json(Отсутствует информация о переводе)\n')
 
     return operation_list
 
-def get_last_operations(list_operations):
+
+def print_last_operations(list_operations):
     executed_constant = 'EXECUTED'
     execute_operations = []
 
@@ -32,7 +35,11 @@ def get_last_operations(list_operations):
 
     logger.info('[CONVERTER-I001] Последние 5 переводов:\n')
 
+    last_operations = []
     for operation in sorted_operations[:5]:
-        print(f'{operation.date} {operation.description}\n'
-              f'{operation.from_ if operation.from_ is None else 'Null'} {operation.to}\n'
+        last_operations.append(operation)
+        print(f'{operation.date.split('T')[0]} {operation.description}\n'
+              f'{operation.from_.split(' ')[0] if operation.from_ is not None else 'Нет данных'} -> '
+              f'{re.sub('(\d{6}).*(\d{4})', r'\1 ****** \2', operation.to.split(' ')[1])} \n'
               f'{operation.operation_amount.amount} {operation.operation_amount.currency.name}\n')
+    return last_operations
