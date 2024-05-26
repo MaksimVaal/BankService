@@ -1,10 +1,3 @@
-class OperationAmount:
-
-    def __init__(self, **kwargs):
-        self.amount = kwargs.get('amount')
-        self.currency = Currency(**kwargs.get('currency'))
-
-
 class Operation:
 
     def __init__(self, **kwargs):
@@ -17,6 +10,13 @@ class Operation:
         self.description = kwargs.get('description')
         self.from_ = kwargs.get('from')
         self.to = kwargs.get('to')
+
+
+class OperationAmount:
+
+    def __init__(self, **kwargs):
+        self.amount = kwargs.get('amount')
+        self.currency = Currency(**kwargs.get('currency'))
 
 
 class Currency:
